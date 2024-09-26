@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql:latest
+    ulimits:
+      nofile:
+        soft: 1048576
+        hard: 1048576
+    ports:
+      - "3307:3306"
+    restart: always
+    environment:
+      - DB_HOST=mysqldb
+      - DB_USER=alva
+      - DB_PASSWORD=123456
+      - DB_NAME=ecommerce
+      - DB_PORT=3306
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Asegúrate de que esto sea una lista
+    networks:
+      - app_network
+    
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  backend:
+    build:
+      context: https://github.com/etec-integration-project/etec-pi-2024-backend-Alvaro-gonzalez05.git
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    networks:
+      - app_network
+    environment:
+      - MYSQLDB_HOST=mysqldb
+      - MYSQLDB_USER=alva
+      - MYSQLDB_PASSWORD=123456
+      - MYSQLDB_DATABASE=ecommerce
+
+  frontend:
+    build:
+      context: https://github.com/etec-integration-project/etec-pi-2024-frontend-Alvaro-gonzalez05.git
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+    networks:
+      - app_network
+    environment:
+      - PORT=3001
+
+networks:
+  app_network:
+    driver: bridge
