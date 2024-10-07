@@ -1,3 +1,7 @@
+REQUISITOS:
+*Tener docker instalado
+
+
 INICIAR PROYECTO:
 
 
@@ -16,3 +20,7 @@ INICIAR PROYECTO:
 
 *El paso anterior empezara a ejecutar el proyecto, una vez docker haya levantado todas las imagenes nustro back queda corriendo en "localhost:300" ,nuetro front queda corriendo en "localhost:3001" y nuetsra base de datos queda corriendo en el puerto 3307
 
+
+TIPS:
+
+*Puedes ver la base de datos desde un entorno grafico como dbeaverce o mysql-Workbench, donde veras tablas de usuarios, productos y pedidos
