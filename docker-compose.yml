@@ -20,13 +20,13 @@ services:
     
     volumes:
       - db-data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      
 
     
     
     networks:
-      - app_network
-    
+        - app_network
+      
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p123456"]
       interval: 10s
